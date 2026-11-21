@@ -158,6 +158,15 @@ html:not(.js) [data-progress] { transform: scaleX(1); }
   [data-spotlight]:hover::after, .card:hover::after { opacity: 1; }
 }
 
+/* Cores do símbolo no cabeçalho: claro sobre o topo escuro, escuro quando o cabeçalho fica branco */
+[data-header] {
+  --cm-a: #ffffff; --cm-b: #c7d8ee; --cm-d: #6f9bd1; --cm-ring: rgba(255, 255, 255, 0.45); --cm-dot: #c7d8ee; --cm-center: #0f2341;
+}
+[data-header][data-scrolled] {
+  --cm-a: #4a78b0; --cm-b: #0f2341; --cm-d: #18345c; --cm-ring: #a9b0ba; --cm-dot: #18345c; --cm-center: #ffffff;
+}
+[data-header] svg * { transition: fill 0.3s, stroke 0.3s; }
+
 /* Rolagem suave (Lenis, só em desktop) */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }

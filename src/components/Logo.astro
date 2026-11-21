@@ -1,22 +1,27 @@
 ---
 import CompassMark from './CompassMark.astro';
 interface Props {
-  tone?: 'brand' | 'light';
+  /** 'header': clara sobre o topo escuro e escura quando o cabeçalho fica branco (um único logo, cor via CSS). */
+  tone?: 'brand' | 'light' | 'header';
   class?: string;
 }
 const { tone = 'brand', class: className = '' } = Astro.props;
-const light = tone === 'light';
+const s = {
+  brand: { name: 'text-navy-800', rule: 'bg-navy-800/25', sub: 'text-navy-700' },
+  light: { name: 'text-white', rule: 'bg-white/30', sub: 'text-steel-200' },
+  header: {
+    name: 'text-white transition-colors duration-300 group-data-[scrolled]/h:text-navy-800',
+    rule: 'bg-white/30 transition-colors duration-300 group-data-[scrolled]/h:bg-navy-800/25',
+    sub: 'text-steel-200 transition-colors duration-300 group-data-[scrolled]/h:text-navy-700',
+  },
+}[tone];
 ---
 
 <span class:list={['inline-flex items-center gap-3', className]}>
   <CompassMark class="size-10 shrink-0" tone={tone} />
   <span class="flex flex-col leading-none">
-    <span class:list={['font-display text-[1.35rem] font-bold tracking-tight', light ? 'text-white' : 'text-navy-800']}>
-      Northpoint
-    </span>
-    <span class:list={['my-1 h-px w-full', light ? 'bg-white/30' : 'bg-navy-800/25']}></span>
-    <span class:list={['font-display text-[0.7rem] font-normal tracking-[0.06em]', light ? 'text-steel-200' : 'text-navy-700']}>
-      Global Holding
-    </span>
+    <span class:list={['font-display text-[1.35rem] font-bold tracking-tight', s.name]}>Northpoint</span>
+    <span class:list={['my-1 h-px w-full', s.rule]}></span>
+    <span class:list={['font-display text-[0.7rem] font-normal tracking-[0.06em]', s.sub]}>Global Holding</span>
   </span>
 </span>

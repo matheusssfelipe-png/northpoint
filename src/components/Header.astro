@@ -7,12 +7,11 @@ const path = cleanPath(Astro.url.pathname);
 
 <header
   data-header
-  class="group/h fixed inset-x-0 top-0 z-50 transition-colors duration-500 ease-out-soft data-[scrolled]:border-b data-[scrolled]:border-silver-200/70 data-[scrolled]:bg-white/95"
+  class="group/h fixed inset-x-0 top-0 z-50 transition-colors duration-500 ease-out-soft data-[scrolled]:border-b data-[scrolled]:border-silver-200/70 data-[scrolled]:bg-white data-[scrolled]:shadow-[0_8px_30px_-12px_rgba(15,35,65,0.12)]"
 >
   <div class="container-np flex h-[72px] items-center justify-between gap-4 lg:h-20">
-    <a href="/" aria-label="Northpoint Global Holding: página inicial" class="relative">
-      <span class="block transition-opacity duration-300 group-data-[scrolled]/h:opacity-0"><Logo tone="light" /></span>
-      <span class="absolute inset-0 opacity-0 transition-opacity duration-300 group-data-[scrolled]/h:opacity-100" aria-hidden="true"><Logo /></span>
+    <a href="/" class="relative" title="Página inicial">
+      <Logo tone="header" />
     </a>
 
     <nav aria-label="Principal" class="hidden lg:block">

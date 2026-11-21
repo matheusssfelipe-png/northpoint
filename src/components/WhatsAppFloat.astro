@@ -23,7 +23,7 @@ const quizHref = homeAnchor(Astro.url.pathname, 'diagnostico');
 <!-- Mobile: barra fixa de ação no rodapé; aparece após o topo e some perto do formulário e do rodapé -->
 <div
   data-mobile-cta
-  class="invisible fixed inset-x-0 bottom-0 z-30 translate-y-full border-t border-silver-200/80 bg-white/95 px-4 pb-[calc(env(safe-area-inset-bottom)+12px)] pt-3 transition-[translate,visibility] duration-500 ease-out-soft data-[visible]:visible data-[visible]:translate-y-0 lg:hidden"
+  class="invisible fixed inset-x-0 bottom-0 z-30 translate-y-full border-t border-silver-200/80 bg-white px-4 shadow-[0_-8px_30px_-12px_rgba(15,35,65,0.15)] pb-[calc(env(safe-area-inset-bottom)+12px)] pt-3 transition-[translate,visibility] duration-500 ease-out-soft data-[visible]:visible data-[visible]:translate-y-0 lg:hidden"
 >
   <div class="mx-auto flex max-w-md gap-2">
     <a href={waLink()} target="_blank" rel="noopener" class="btn btn-wa flex-1 px-3 py-3 shadow-none">
