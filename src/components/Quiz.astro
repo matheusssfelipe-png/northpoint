@@ -61,7 +61,7 @@ const steps: { key: string; q: string; options: { value: string; label: string; 
       data-reveal
     >
       <div class="flex items-center justify-between gap-4 text-xs font-semibold uppercase tracking-[0.15em] text-silver-500">
-        <span data-quiz-label>Pergunta 1 de 3</span>
+        <span data-quiz-label aria-live="polite">Pergunta 1 de 3</span>
         <button type="button" data-quiz-back class="invisible rounded-full px-3 py-1 text-steel-600 hover:bg-ice">← Voltar</button>
       </div>
       <div class="mt-3 h-1 overflow-hidden rounded-full bg-ice">
@@ -69,7 +69,7 @@ const steps: { key: string; q: string; options: { value: string; label: string; 
       </div>
 
       {steps.map((s, i) => (
-        <fieldset data-quiz-step={i} data-key={s.key} hidden={i !== 0} class="np-step mt-8">
+        <fieldset data-quiz-step={i} data-key={s.key} hidden={i !== 0} tabindex="-1" class="np-step mt-8 focus:outline-none">
           <legend class="font-display text-xl font-bold sm:text-2xl">{s.q}</legend>
           <div class:list={['mt-6 grid gap-3', s.options.length > 2 && 'sm:grid-cols-2']}>
             {s.options.map((o) => (
@@ -92,7 +92,7 @@ const steps: { key: string; q: string; options: { value: string; label: string; 
         </fieldset>
       ))}
 
-      <div data-quiz-result hidden class="np-step mt-8">
+      <div data-quiz-result hidden tabindex="-1" class="np-step mt-8 focus:outline-none">
         <p class="eyebrow">Nossa recomendação</p>
         <h3 data-result-title class="mt-4 font-display text-2xl font-bold sm:text-3xl"></h3>
         <p data-result-text class="mt-4 text-lg leading-relaxed text-navy-700/80"></p>
@@ -100,7 +100,7 @@ const steps: { key: string; q: string; options: { value: string; label: string; 
           <p class="font-semibold">Seu resumo</p>
           <ul data-result-summary class="mt-2 space-y-1 text-navy-700/80"></ul>
         </div>
-        <a data-result-cta href="#" target="_blank" rel="noopener" class="btn mt-8 w-full bg-[#25D366] py-4 text-base text-white hover:-translate-y-0.5 hover:shadow-lg sm:w-auto">
+        <a data-result-cta data-track="diagnostico_resultado" href="#" target="_blank" rel="noopener" class="btn btn-wa mt-8 w-full py-4 text-base sm:w-auto">
           <WaIcon class="size-5" /> Receber meu plano no WhatsApp
         </a>
         <button type="button" data-quiz-restart class="mt-4 block text-sm font-medium text-steel-600 underline-offset-4 hover:underline">Refazer diagnóstico</button>
@@ -110,6 +110,8 @@ const steps: { key: string; q: string; options: { value: string; label: string; 
 </section>
 
 <script>
+  import { track } from '../scripts/track';
+
   const recs: Record<string, { title: string; text: string }> = {
     atraso: { title: 'Fulfillment Northpoint', text: 'Seu maior risco hoje é a reputação. Com armazenagem e envios no prazo, você protege a conta, recupera exposição e volta a crescer com tranquilidade.' },
     produto: { title: 'Consultoria de produto e mercado', text: 'Vamos analisar demanda, concorrência e margem para você investir no que realmente vende, sem apostar no escuro.' },
@@ -137,9 +139,11 @@ const steps: { key: string; q: string; options: { value: string; label: string; 
       steps.forEach((s, j) => (s.hidden = j !== i));
       result.hidden = i < steps.length;
       bar.style.width = `${Math.min(((i + 1) / steps.length) * 100, 100)}%`;
-      label.textContent = i < steps.length ? `Pergunta ${i + 1} de ${steps.length}` : 'Pronto!';
+      label.textContent = i < steps.length ? `Pergunta ${i + 1} de ${steps.length}` : 'Pronto! Veja sua recomendação.';
       back.classList.toggle('invisible', i === 0 || i >= steps.length);
       if (i >= steps.length) renderResult();
+      // Leva o foco para a nova pergunta (teclado e leitores de tela não ficam "perdidos")
+      (i < steps.length ? steps[i] : result).focus({ preventScroll: true });
       // No celular a pessoa toca nas opções de baixo: traz o topo do card de volta para a tela
       const top = root.getBoundingClientRect().top;
       if (top < 0) window.scrollTo({ top: window.scrollY + top - 90, behavior: 'smooth' });
@@ -165,11 +169,18 @@ const steps: { key: string; q: string; options: { value: string; label: string; 
       ].join('\n');
       root.querySelector<HTMLAnchorElement>('[data-result-cta]')!.href =
         `https://wa.me/${root.dataset.whatsapp}?text=${encodeURIComponent(msg)}`;
+      track('quiz_complete', {
+        recommendation: rec.title,
+        revenue: answers.momento?.text ?? '',
+        challenge: answers.desafio?.text ?? '',
+        service_mode: answers.atendimento?.text ?? '',
+      });
     };
 
     steps.forEach((step, i) => {
       step.querySelectorAll<HTMLButtonElement>('button[data-value]').forEach((btn) =>
         btn.addEventListener('click', () => {
+          if (i === 0) track('quiz_start');
           answers[step.dataset.key!] = { value: btn.dataset.value!, text: btn.dataset.text! };
           show(i + 1);
         }),
@@ -179,5 +190,5 @@ const steps: { key: string; q: string; options: { value: string; label: string; 
     root.querySelector('[data-quiz-restart]')!.addEventListener('click', () => show(0));
   }
 
-  document.addEventListener('astro:page-load', initQuiz);
+  initQuiz();
 </script>

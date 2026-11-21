@@ -11,7 +11,7 @@ const path = Astro.url.pathname;
   <div class="container-np grid gap-12 py-16 md:grid-cols-12">
     <div class="md:col-span-5">
       <Logo tone="light" />
-      <p class="mt-6 max-w-sm text-sm leading-relaxed text-steel-200/70">
+      <p class="mt-6 max-w-sm text-sm leading-relaxed text-steel-200/80">
         Consultoria e fulfillment para quem vende no Mercado Livre. Atendimento presencial em São Paulo e online para todo o Brasil.
       </p>
     </div>
@@ -26,13 +26,15 @@ const path = Astro.url.pathname;
       <ul class="mt-5 space-y-3 text-sm">
         <li><a class="inline-flex items-center gap-3 hover:text-white" href={waLink()} target="_blank" rel="noopener"><WaIcon class="size-4" />WhatsApp {site.contact.whatsappLabel}</a></li>
         <li><a class="inline-flex items-center gap-3 hover:text-white" href={`mailto:${site.contact.email}`}><Icon name="mail" class="size-4" />{site.contact.email}</a></li>
-        <li><a class="inline-flex items-center gap-3 hover:text-white" href={site.contact.instagram} target="_blank" rel="noopener"><Icon name="instagram" class="size-4" />Instagram</a></li>
+        {site.contact.instagram && (
+          <li><a class="inline-flex items-center gap-3 hover:text-white" href={site.contact.instagram} target="_blank" rel="noopener"><Icon name="instagram" class="size-4" />Instagram</a></li>
+        )}
         <li class="inline-flex items-center gap-3"><Icon name="pin" class="size-4" />São Paulo - SP</li>
       </ul>
     </div>
   </div>
   <div class="rule opacity-30"></div>
-  <div class="container-np flex flex-col gap-2 py-6 text-xs text-steel-200/50 sm:flex-row sm:justify-between">
+  <div class="container-np flex flex-col gap-2 py-6 text-xs text-steel-200/75 sm:flex-row sm:justify-between">
     <p>© {year} {site.name}. Todos os direitos reservados.</p>
     <p>Mercado Livre é marca registrada de seus respectivos titulares. A Northpoint não possui vínculo oficial com a plataforma.</p>
   </div>

@@ -22,7 +22,7 @@ const second = secondary ?? { label: 'Fazer diagnóstico rápido', href: homeAnc
         {text && <p class="mt-4 text-steel-200/80 sm:text-lg">{text}</p>}
       </div>
       <div class="flex flex-col gap-3 sm:flex-row lg:shrink-0">
-        <a href={waLink(whatsappMessage)} target="_blank" rel="noopener" class="btn bg-[#25D366] text-white hover:-translate-y-0.5 hover:shadow-lg">
+        <a href={waLink(whatsappMessage)} target="_blank" rel="noopener" class="btn btn-wa">
           <WaIcon class="size-5" /> Chamar no WhatsApp
         </a>
         <a href={second.href} class="btn btn-ghost">{second.label}</a>

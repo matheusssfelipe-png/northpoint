@@ -1,18 +1,18 @@
 ---
 import Logo from './Logo.astro';
 import WaIcon from './WaIcon.astro';
-import { nav, navHref, waLink, homeAnchor } from '../data/site';
-const path = Astro.url.pathname;
+import { nav, navHref, waLink, homeAnchor, cleanPath } from '../data/site';
+const path = cleanPath(Astro.url.pathname);
 ---
 
 <header
   data-header
-  class="group/h fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-out-soft data-[scrolled]:border-b data-[scrolled]:border-silver-200/70 data-[scrolled]:bg-white/90 data-[scrolled]:backdrop-blur-xl"
+  class="group/h fixed inset-x-0 top-0 z-50 transition-colors duration-500 ease-out-soft data-[scrolled]:border-b data-[scrolled]:border-silver-200/70 data-[scrolled]:bg-white/95"
 >
   <div class="container-np flex h-[72px] items-center justify-between gap-4 lg:h-20">
-    <a href="/" aria-label="Northpoint - página inicial" class="relative">
+    <a href="/" aria-label="Northpoint Global Holding: página inicial" class="relative">
       <span class="block transition-opacity duration-300 group-data-[scrolled]/h:opacity-0"><Logo tone="light" /></span>
-      <span class="absolute inset-0 opacity-0 transition-opacity duration-300 group-data-[scrolled]/h:opacity-100"><Logo /></span>
+      <span class="absolute inset-0 opacity-0 transition-opacity duration-300 group-data-[scrolled]/h:opacity-100" aria-hidden="true"><Logo /></span>
     </a>
 
     <nav aria-label="Principal" class="hidden lg:block">
@@ -24,7 +24,7 @@ const path = Astro.url.pathname;
               <a
                 href={href}
                 aria-current={path === href ? 'page' : undefined}
-                class="relative rounded-full px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:text-white aria-[current=page]:text-white group-data-[scrolled]/h:text-navy-700 group-data-[scrolled]/h:hover:text-steel-600"
+                class="relative rounded-full px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:text-white aria-[current=page]:text-white group-data-[scrolled]/h:text-navy-700 group-data-[scrolled]/h:hover:text-steel-600 group-data-[scrolled]/h:aria-[current=page]:text-steel-600"
               >
                 {item.label}
               </a>
@@ -48,28 +48,30 @@ const path = Astro.url.pathname;
         target="_blank"
         rel="noopener"
         aria-label="Falar no WhatsApp"
-        class="grid size-11 place-items-center rounded-full bg-[#25D366] text-white sm:hidden"
+        class="grid size-11 place-items-center rounded-full bg-wa text-navy-950 sm:hidden"
       >
         <WaIcon class="size-5" />
       </a>
       <button
+        type="button"
         data-menu-toggle
         aria-expanded="false"
         aria-controls="menu-mobile"
         aria-label="Abrir menu"
         class="group/btn grid size-11 place-items-center rounded-full border border-white/20 text-white lg:hidden group-data-[scrolled]/h:border-navy-800/15 group-data-[scrolled]/h:text-navy-800"
       >
-        <svg class="size-5 group-aria-expanded/btn:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 8h16M4 16h16" /></svg>
-        <svg class="hidden size-5 group-aria-expanded/btn:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        <svg class="size-5 group-aria-expanded/btn:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16" /></svg>
+        <svg class="hidden size-5 group-aria-expanded/btn:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
       </button>
     </div>
   </div>
 </header>
 
+<!-- Fechado: invisível também para teclado e leitores de tela (visibility), não só transparente. -->
 <div
   id="menu-mobile"
   data-menu
-  class="on-dark pointer-events-none fixed inset-0 z-40 bg-navy-900 opacity-0 transition-opacity duration-500 ease-out-soft data-[open]:pointer-events-auto data-[open]:opacity-100 lg:hidden"
+  class="on-dark invisible fixed inset-0 z-40 bg-navy-900 opacity-0 transition-[opacity,visibility] duration-500 ease-out-soft data-[open]:visible data-[open]:opacity-100 lg:hidden"
 >
   <nav aria-label="Menu móvel" class="container-np flex h-full flex-col pb-10 pt-28">
     <p class="eyebrow">Menu</p>
@@ -79,8 +81,8 @@ const path = Astro.url.pathname;
       ))}
     </div>
     <div class="mt-auto space-y-3">
-      <p class="text-sm text-steel-200/70">Atendimento presencial em São Paulo e online para todo o Brasil.</p>
-      <a href={waLink()} target="_blank" rel="noopener" class="btn w-full bg-[#25D366] text-white"><WaIcon class="size-5" /> Chamar no WhatsApp</a>
+      <p class="text-sm text-steel-200/80">Atendimento presencial em São Paulo e online para todo o Brasil.</p>
+      <a href={waLink()} target="_blank" rel="noopener" class="btn btn-wa w-full"><WaIcon class="size-5" /> Chamar no WhatsApp</a>
       <a href={homeAnchor(path, 'diagnostico')} class="btn btn-ghost w-full">Fazer diagnóstico rápido</a>
     </div>
   </nav>

@@ -1,12 +1,13 @@
 ---
 import '@fontsource-variable/montserrat';
 import '@fontsource-variable/inter';
+import montserratLatin from '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2?url';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import '../styles/global.css';
-import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
-import { site } from '../data/site';
+import { site, cleanPath } from '../data/site';
 
 interface Crumb { name: string; path: string }
 interface Props {
@@ -19,10 +20,13 @@ interface Props {
 }
 
 const { title, description, schema = [], breadcrumbs, noindex = false } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const path = cleanPath(Astro.url.pathname);
+const canonical = new URL(path, Astro.site).href;
 const fullTitle = title.includes(site.shortName) ? title : `${title} | ${site.shortName}`;
-const ogImage = new URL('/og.png', Astro.site).href; // TODO: gerar imagem OG 1200x630
+const ogImage = new URL('/og.png', Astro.site).href;
 const orgId = new URL('/#organizacao', Astro.site).href;
+const robots = noindex || !site.launched ? 'noindex, follow' : 'index, follow, max-image-preview:large';
+const gtmId = site.analytics.gtmId;
 
 const organization = {
   '@context': 'https://schema.org',
@@ -31,11 +35,12 @@ const organization = {
   name: site.name,
   alternateName: site.shortName,
   url: new URL('/', Astro.site).href,
-  logo: new URL('/favicon.svg', Astro.site).href,
+  logo: new URL('/logo.png', Astro.site).href,
+  image: ogImage,
   description: site.description,
   email: site.contact.email,
   telephone: `+${site.contact.whatsapp}`,
-  sameAs: [site.contact.instagram],
+  ...(site.contact.instagram && { sameAs: [site.contact.instagram] }),
   address: { '@type': 'PostalAddress', addressLocality: site.city, addressRegion: site.region, addressCountry: site.country },
   areaServed: [
     { '@type': 'City', name: 'São Paulo' },
@@ -65,10 +70,13 @@ const schemas = [organization, ...schema, ...(breadcrumbSchema ? [breadcrumbSche
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
+    <meta name="robots" content={robots} />
     <meta name="theme-color" content="#0f2341" />
+    <link rel="preload" href={montserratLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <meta property="og:type" content="website" />
@@ -78,12 +86,26 @@ const schemas = [organization, ...schema, ...(breadcrumbSchema ? [breadcrumbSche
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Northpoint: consultoria e fulfillment para Mercado Livre" />
     <meta name="twitter:card" content="summary_large_image" />
 
     {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
 
     <script is:inline>document.documentElement.classList.add('js');</script>
-    <ClientRouter fallback="swap" />
+    {gtmId && (
+      <script is:inline define:vars={{ gtmId }}>
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          var f = d.getElementsByTagName(s)[0], j = d.createElement(s);
+          j.async = true;
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i;
+          f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', gtmId);
+      </script>
+    )}
   </head>
   <body class="min-h-dvh overflow-x-clip">
     <a href="#conteudo" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2">

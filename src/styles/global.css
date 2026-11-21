@@ -11,19 +11,29 @@
   --color-steel-600: #2f5a8f;
   --color-steel-400: #6f9bd1;
   --color-steel-200: #c7d8ee;
-  --color-silver-500: #8a929e;
+  --color-silver-500: #6b7380;
   --color-silver-400: #a9b0ba;
   --color-silver-200: #dde1e7;
   --color-ice: #f4f6f9;
   --color-signal: #e07a3f;
+  --color-wa: #25d366;
+  --color-wa-dark: #1fbd5a;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Transição suave entre páginas, nativa do navegador (sem JavaScript). */
+@view-transition {
+  navigation: auto;
 }
 
 @layer base {
   html {
     @apply bg-white font-sans text-navy-800 antialiased;
     text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
   }
   h1, h2, h3, h4 {
     @apply font-display tracking-tight text-balance;
@@ -31,6 +41,10 @@
   p { @apply text-pretty; }
   ::selection { @apply bg-steel-600 text-white; }
   :focus-visible { @apply outline-2 outline-offset-2 outline-steel-400; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
 @layer components {
@@ -52,6 +66,8 @@
   .on-dark .btn-primary { @apply bg-white text-navy-800 shadow-black/20 hover:bg-steel-200; }
   .btn-ghost { @apply border border-navy-800/15 text-navy-800 hover:border-navy-800/40 hover:bg-navy-800/5; }
   .on-dark .btn-ghost { @apply border-white/20 text-white hover:border-white/50 hover:bg-white/5; }
+  /* Verde do WhatsApp com texto escuro: contraste ~8:1 (branco no verde ficava em 2:1). */
+  .btn-wa { @apply bg-wa text-navy-950 shadow-lg shadow-black/15 hover:-translate-y-0.5 hover:bg-wa-dark hover:shadow-xl; }
 
   .card {
     @apply rounded-2xl border border-silver-200 bg-white p-7 transition-all duration-500 ease-out-soft;
@@ -61,12 +77,64 @@
   .rule { @apply h-px w-full bg-gradient-to-r from-transparent via-silver-400/60 to-transparent; }
 }
 
-/* Estado inicial das animações de entrada (só quando o JS está ativo e o usuário aceita movimento) */
+/* ---------------------------------------------------------------
+   Movimento (CSS puro; o JS só marca .is-in ao rolar)
+   --------------------------------------------------------------- */
+.np-word { display: inline-block; }
+
 @media (prefers-reduced-motion: no-preference) {
-  .js [data-reveal] { opacity: 0; transform: translateY(18px); }
-  .js [data-split]:not([data-split-ready]) { opacity: 0; }
+  /* Entrada ao rolar. A lista de propriedades preserva as transições de hover dos cards e botões. */
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition-property: opacity, transform, translate, background-color, border-color, box-shadow, color;
+    transition-duration: 0.9s, 0.9s, 0.5s, 0.5s, 0.5s, 0.5s, 0.3s;
+    transition-timing-function: var(--ease-expo), var(--ease-expo), var(--ease-out-soft), var(--ease-out-soft), var(--ease-out-soft), var(--ease-out-soft), ease;
+    transition-delay: var(--d, 0ms), var(--d, 0ms), 0s, 0s, 0s, 0s, 0s;
+  }
+  .js [data-reveal].is-in { opacity: 1; transform: none; }
+  /* Rede de segurança: se o JavaScript falhar, o conteúdo aparece sozinho. */
+  .js:not(.motion-ready) [data-reveal] { animation: np-show 0.6s var(--ease-expo) 3s forwards; }
+
+  /* Topo da página: anima só com CSS, sem esperar o JavaScript (LCP rápido). */
+  .np-in { animation: np-rise 1s var(--ease-expo) both; animation-delay: var(--d, 0ms); }
+  .np-word { animation: np-word 1.1s var(--ease-expo) both; animation-delay: calc(var(--i, 0) * 70ms + 80ms); }
+
+  /* Rosa dos ventos: o anel surge e a estrela gira até assentar no norte. */
+  [data-compass] .np-ring,
+  [data-compass] .np-star { transform-box: view-box; transform-origin: 50% 50%; }
+  [data-compass] .np-ring { animation: np-ring 1.4s var(--ease-expo) both; }
+  [data-compass] .np-star { animation: np-star 1.7s var(--ease-expo) 0.1s both; }
+  [data-compass] .np-dots { animation: np-fade 0.8s ease 0.7s both; }
+
+  /* Rotas que se desenham no fundo do topo. */
+  [data-draw] {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: np-draw 2.4s ease-in-out forwards;
+    animation-delay: calc(0.4s + var(--i, 0) * 0.18s);
+  }
 }
-[data-split] .np-word { display: inline-block; will-change: transform, opacity; }
+
+@keyframes np-show { to { opacity: 1; transform: none; } }
+@keyframes np-rise { from { opacity: 0; transform: translateY(18px); } }
+@keyframes np-word { from { opacity: 0; transform: translateY(0.5em); } }
+@keyframes np-ring { from { opacity: 0; transform: scale(0.6); } }
+@keyframes np-star { from { opacity: 0; transform: rotate(-135deg) scale(0.4); } }
+@keyframes np-fade { from { opacity: 0; } }
+@keyframes np-draw { to { stroke-dashoffset: 0; } }
+
+/* Linha de progresso do "Como funciona": acompanha a rolagem onde o navegador suporta. */
+[data-progress] { transform-origin: left center; transform: scaleX(0); transition: transform 1.8s var(--ease-expo) 0.3s; }
+.is-in > [data-progress],
+html:not(.js) [data-progress] { transform: scaleX(1); }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-progress] { transition: none; animation: np-grow linear both; animation-timeline: view(); animation-range: entry 0% cover 50%; }
+  }
+}
+@media (prefers-reduced-motion: reduce) { [data-progress] { transform: none; } }
+@keyframes np-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 /* Faixa de serviços em movimento */
 .np-marquee { animation: np-marquee 38s linear infinite; }
@@ -77,6 +145,7 @@
 /* Passos do diagnóstico */
 .np-step:not([hidden]) { animation: np-step-in 0.55s var(--ease-out-soft) both; }
 @keyframes np-step-in { from { opacity: 0; transform: translateX(16px); } }
+@media (prefers-reduced-motion: reduce) { .np-step:not([hidden]) { animation: none; } }
 
 /* Brilho que acompanha o cursor nos cards (só em dispositivos com mouse) */
 @media (hover: hover) {
@@ -89,16 +158,16 @@
   [data-spotlight]:hover::after, .card:hover::after { opacity: 1; }
 }
 
-/* Lenis */
+/* Rolagem suave (Lenis, só em desktop) */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
 
 /* Transição entre páginas */
-::view-transition-old(root) { animation: 260ms var(--ease-out-soft) both np-fade-out; }
-::view-transition-new(root) { animation: 520ms var(--ease-out-soft) both np-fade-in; }
-@keyframes np-fade-out { to { opacity: 0; } }
-@keyframes np-fade-in { from { opacity: 0; transform: translateY(10px); } }
+::view-transition-old(root) { animation: 220ms var(--ease-out-soft) both np-vt-out; }
+::view-transition-new(root) { animation: 480ms var(--ease-out-soft) both np-vt-in; }
+@keyframes np-vt-out { to { opacity: 0; } }
+@keyframes np-vt-in { from { opacity: 0; transform: translateY(10px); } }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 }

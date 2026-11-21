@@ -4,5 +4,10 @@ import PageHero from '../components/PageHero.astro';
 ---
 
 <BaseLayout title="Página não encontrada" description="A página que você procura não existe." noindex>
-  <PageHero eyebrow="Erro 404" title="Parece que perdemos o norte." lead="A página que você procura não existe ou mudou de endereço. Volte para o início ou fale com a gente." />
+  <PageHero
+    eyebrow="Erro 404"
+    title="Parece que perdemos o norte."
+    lead="A página que você procura não existe ou mudou de endereço. Volte para o início ou fale direto com a gente."
+    secondary={{ label: 'Voltar para o início', href: '/' }}
+  />
 </BaseLayout>

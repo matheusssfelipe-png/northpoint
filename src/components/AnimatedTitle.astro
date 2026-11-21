@@ -1,0 +1,30 @@
+---
+/**
+ * Título que entra palavra por palavra usando só CSS (sem esperar JavaScript),
+ * o que mantém o LCP rápido no celular. O trecho `highlight` vira uma unidade com gradiente.
+ */
+interface Props {
+  text: string;
+  highlight?: string;
+  as?: 'h1' | 'h2';
+  class?: string;
+}
+const { text, highlight, as: Tag = 'h1', class: className } = Astro.props;
+
+const words = (s: string) => s.split(/\s+/).filter(Boolean);
+const hasHighlight = Boolean(highlight && text.includes(highlight));
+const [before, after = ''] = hasHighlight ? text.split(highlight!) : [text];
+const beforeWords = words(before);
+const afterWords = words(after);
+// Pontuação colada ao destaque (ex.: "Livre.") não ganha espaço antes.
+const glued = /^[.,;:!?]/.test(after);
+let i = 0;
+---
+
+<Tag class={className}>
+  {beforeWords.map((w) => <><span class="np-word" style={`--i:${i++}`}>{w}</span>{' '}</>)}
+  {hasHighlight && (
+    <span class="np-word bg-gradient-to-r from-steel-400 to-steel-200 bg-clip-text pb-1 text-transparent" style={`--i:${i++}`}>{highlight}</span>
+  )}
+  {afterWords.map((w, j) => <>{j === 0 && glued ? '' : ' '}<span class="np-word" style={`--i:${i++}`}>{w}</span></>)}
+</Tag>
