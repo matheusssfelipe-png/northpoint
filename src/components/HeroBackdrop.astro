@@ -1,0 +1,29 @@
+---
+// Fundo dos heroes: grade pontilhada (referência ao mapa do flyer) + rotas que se desenham + brilho suave.
+---
+
+<div aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_20%,#18345c_0%,#0a1830_55%,#071226_100%)]"></div>
+  <div
+    class="absolute inset-0 opacity-40 [background-image:radial-gradient(rgba(199,216,238,.35)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_65%_45%,black_10%,transparent_70%)]"
+  ></div>
+  <svg class="absolute inset-0 h-full w-full" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" fill="none">
+    <g stroke="url(#np-route)" stroke-width="1.2">
+      <path data-draw d="M-20 620 C 260 560, 420 700, 700 520 S 1140 300, 1460 360" />
+      <path data-draw d="M120 820 C 380 560, 640 600, 880 420 S 1240 160, 1460 120" opacity=".7" />
+      <path data-draw d="M600 -20 C 760 180, 820 300, 1020 380 S 1300 520, 1460 640" opacity=".5" />
+    </g>
+    <g fill="#6f9bd1">
+      <circle cx="700" cy="520" r="3.5" /><circle cx="880" cy="420" r="3.5" /><circle cx="1020" cy="380" r="3.5" />
+      <circle cx="700" cy="520" r="10" opacity=".2" /><circle cx="1020" cy="380" r="10" opacity=".2" />
+    </g>
+    <defs>
+      <linearGradient id="np-route" x1="0" x2="1">
+        <stop offset="0" stop-color="#6f9bd1" stop-opacity="0" />
+        <stop offset=".5" stop-color="#6f9bd1" stop-opacity=".55" />
+        <stop offset="1" stop-color="#a9b0ba" stop-opacity=".15" />
+      </linearGradient>
+    </defs>
+  </svg>
+  <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-silver-400/40 to-transparent"></div>
+</div>

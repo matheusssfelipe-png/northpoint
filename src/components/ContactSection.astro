@@ -1,0 +1,58 @@
+---
+import Icon from './Icon.astro';
+import HeroBackdrop from './HeroBackdrop.astro';
+import { site, waLink } from '../data/site';
+interface Props { defaultInterest?: string }
+const { defaultInterest = 'Consultoria' } = Astro.props;
+const interests = ['Consultoria', 'Fulfillment (armazenagem e envios)', 'Gestão de conta', 'Anúncios e Mercado Ads', 'Ainda não sei'];
+const revenue = ['Ainda não vendo', 'Até R$ 5 mil/mês', 'R$ 5 mil a R$ 30 mil/mês', 'R$ 30 mil a R$ 100 mil/mês', 'Acima de R$ 100 mil/mês'];
+const field = 'mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-steel-200/40 transition-colors focus:border-steel-400 focus:bg-white/10 focus:outline-none';
+---
+
+<section id="contato" class="on-dark relative isolate overflow-hidden py-24 text-white md:py-32">
+  <HeroBackdrop />
+  <div class="container-np relative grid gap-14 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <p class="eyebrow" data-reveal>Fale com a gente</p>
+      <h2 class="mt-5 text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl" data-reveal>Encontre o norte da sua operação no Mercado Livre.</h2>
+      <p class="mt-6 text-lg leading-relaxed text-steel-200/80" data-reveal>
+        Conte em que momento sua operação está. Analisamos o seu cenário e mostramos os próximos passos para vender mais com segurança.
+      </p>
+      <ul class="mt-10 space-y-4 text-steel-200" data-reveal>
+        <li class="flex items-center gap-3"><Icon name="check" class="size-5 text-steel-400" />Atendimento direto pelo WhatsApp</li>
+        <li class="flex items-center gap-3"><Icon name="check" class="size-5 text-steel-400" />Proposta sob medida para o seu momento</li>
+        <li class="flex items-center gap-3"><Icon name="check" class="size-5 text-steel-400" />Presencial em São Paulo ou online</li>
+      </ul>
+      <a href={waLink()} target="_blank" rel="noopener" class="btn btn-primary mt-10" data-reveal>
+        Prefiro chamar direto no WhatsApp <Icon name="arrow" class="size-4" />
+      </a>
+    </div>
+
+    <form
+      data-lead-form
+      data-whatsapp={site.contact.whatsapp}
+      class="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md sm:p-10 lg:col-span-7"
+      data-reveal
+    >
+      <div class="grid gap-5 sm:grid-cols-2">
+        <label class="block text-sm font-medium">Nome<input class={field} name="nome" required autocomplete="name" placeholder="Seu nome" /></label>
+        <label class="block text-sm font-medium">Empresa ou loja<input class={field} name="empresa" autocomplete="organization" placeholder="Opcional" /></label>
+        <label class="block text-sm font-medium">Faturamento mensal
+          <select class={field} name="faturamento" required>
+            {revenue.map((r) => <option class="text-navy-800">{r}</option>)}
+          </select>
+        </label>
+        <label class="block text-sm font-medium">Interesse
+          <select class={field} name="interesse" required>
+            {interests.map((i) => <option class="text-navy-800" selected={i.startsWith(defaultInterest)}>{i}</option>)}
+          </select>
+        </label>
+        <label class="block text-sm font-medium sm:col-span-2">Como podemos ajudar?
+          <textarea class={field} name="mensagem" rows="4" placeholder="Ex.: tenho atrasos no envio e as vendas caíram"></textarea>
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary mt-8 w-full sm:w-auto">Enviar e continuar no WhatsApp <Icon name="arrow" class="size-4" /></button>
+      <p class="mt-4 text-xs text-steel-200/50">Ao enviar, você será direcionado ao WhatsApp com sua mensagem preenchida.</p>
+    </form>
+  </div>
+</section>

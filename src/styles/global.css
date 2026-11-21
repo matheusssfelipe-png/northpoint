@@ -1,0 +1,104 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Montserrat Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-navy-950: #071226;
+  --color-navy-900: #0a1830;
+  --color-navy-800: #0f2341;
+  --color-navy-700: #18345c;
+  --color-steel-600: #2f5a8f;
+  --color-steel-400: #6f9bd1;
+  --color-steel-200: #c7d8ee;
+  --color-silver-500: #8a929e;
+  --color-silver-400: #a9b0ba;
+  --color-silver-200: #dde1e7;
+  --color-ice: #f4f6f9;
+  --color-signal: #e07a3f;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    @apply bg-white font-sans text-navy-800 antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight text-balance;
+  }
+  p { @apply text-pretty; }
+  ::selection { @apply bg-steel-600 text-white; }
+  :focus-visible { @apply outline-2 outline-offset-2 outline-steel-400; }
+}
+
+@layer components {
+  .container-np { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-display text-xs font-semibold uppercase tracking-[0.2em] text-steel-600;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply h-px w-8 bg-current;
+  }
+  .on-dark .eyebrow { @apply text-steel-400; }
+
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-3.5 font-display text-sm font-semibold transition-all duration-500 ease-out-soft;
+  }
+  .btn-primary { @apply bg-steel-600 text-white shadow-lg shadow-steel-600/20 hover:-translate-y-0.5 hover:bg-navy-700 hover:shadow-xl; }
+  .on-dark .btn-primary { @apply bg-white text-navy-800 shadow-black/20 hover:bg-steel-200; }
+  .btn-ghost { @apply border border-navy-800/15 text-navy-800 hover:border-navy-800/40 hover:bg-navy-800/5; }
+  .on-dark .btn-ghost { @apply border-white/20 text-white hover:border-white/50 hover:bg-white/5; }
+
+  .card {
+    @apply rounded-2xl border border-silver-200 bg-white p-7 transition-all duration-500 ease-out-soft;
+  }
+  .card:hover { @apply -translate-y-1 border-steel-400/50 shadow-[0_20px_50px_-20px_rgba(15,35,65,0.25)]; }
+
+  .rule { @apply h-px w-full bg-gradient-to-r from-transparent via-silver-400/60 to-transparent; }
+}
+
+/* Estado inicial das animações de entrada (só quando o JS está ativo e o usuário aceita movimento) */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] { opacity: 0; transform: translateY(18px); }
+  .js [data-split]:not([data-split-ready]) { opacity: 0; }
+}
+[data-split] .np-word { display: inline-block; will-change: transform, opacity; }
+
+/* Faixa de serviços em movimento */
+.np-marquee { animation: np-marquee 38s linear infinite; }
+.np-marquee:hover { animation-play-state: paused; }
+@keyframes np-marquee { to { transform: translateX(calc(-50% - 1.25rem)); } }
+@media (prefers-reduced-motion: reduce) { .np-marquee { animation: none; } }
+
+/* Passos do diagnóstico */
+.np-step:not([hidden]) { animation: np-step-in 0.55s var(--ease-out-soft) both; }
+@keyframes np-step-in { from { opacity: 0; transform: translateX(16px); } }
+
+/* Brilho que acompanha o cursor nos cards (só em dispositivos com mouse) */
+@media (hover: hover) {
+  [data-spotlight], .card { position: relative; isolation: isolate; }
+  [data-spotlight]::after, .card::after {
+    content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(111, 155, 209, 0.14), transparent 45%);
+    opacity: 0; transition: opacity 0.4s;
+  }
+  [data-spotlight]:hover::after, .card:hover::after { opacity: 1; }
+}
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* Transição entre páginas */
+::view-transition-old(root) { animation: 260ms var(--ease-out-soft) both np-fade-out; }
+::view-transition-new(root) { animation: 520ms var(--ease-out-soft) both np-fade-in; }
+@keyframes np-fade-out { to { opacity: 0; } }
+@keyframes np-fade-in { from { opacity: 0; transform: translateY(10px); } }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}

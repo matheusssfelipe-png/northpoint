@@ -1,0 +1,32 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  items: { icon: IconName; title: string; text: string }[];
+  muted?: boolean;
+}
+const { eyebrow, title, lead, items, muted = false } = Astro.props;
+---
+
+<section class:list={['py-24 md:py-32', muted && 'bg-ice']}>
+  <div class="container-np grid gap-14 lg:grid-cols-12">
+    <div class="lg:col-span-4">
+      <div class="lg:sticky lg:top-32">
+        <p class="eyebrow" data-reveal>{eyebrow}</p>
+        <h2 class="mt-5 text-3xl font-bold sm:text-4xl" data-reveal>{title}</h2>
+        {lead && <p class="mt-5 leading-relaxed text-navy-700/75" data-reveal>{lead}</p>}
+      </div>
+    </div>
+    <div class="grid gap-5 sm:grid-cols-2 lg:col-span-8">
+      {items.map((i) => (
+        <article class="card" data-reveal>
+          <Icon name={i.icon} class="size-7 text-steel-600" />
+          <h3 class="mt-5 text-lg font-semibold">{i.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-navy-700/75">{i.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

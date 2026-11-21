@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import FeatureList from '../components/FeatureList.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import ContactSection from '../components/ContactSection.astro';
+import type { FaqItem } from '../data/faq';
+
+const faq: FaqItem[] = [
+  { q: 'Qual a diferença entre consultoria e gestão de conta?', a: 'Na consultoria, analisamos sua conta e entregamos um plano de ação para você ou sua equipe executar com o nosso apoio. Na gestão de conta, a Northpoint assume a operação do dia a dia da sua loja.' },
+  { q: 'A consultoria é online ou presencial?', a: 'As duas opções: presencial em São Paulo e online para todo o Brasil.' },
+  { q: 'Em quanto tempo vejo resultados?', a: 'Depende do ponto de partida. Ajustes de anúncios, preço e logística costumam gerar efeito nas primeiras semanas, enquanto o crescimento consistente vem com acompanhamento.' },
+  { q: 'Quanto custa?', a: 'O investimento varia conforme o tamanho da operação e o escopo. Após uma conversa inicial, enviamos uma proposta sob medida.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Consultoria para Mercado Livre',
+    serviceType: 'Consultoria de marketplace',
+    provider: { '@id': new URL('/#organizacao', Astro.site).href },
+    areaServed: ['São Paulo', 'Brasil'],
+    description: 'Diagnóstico de conta, estratégia de produtos, otimização de anúncios, precificação, Mercado Ads e acompanhamento para vender mais no Mercado Livre.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+
+<BaseLayout
+  title="Consultoria Mercado Livre em São Paulo e Online | Northpoint"
+  description="Consultoria para Mercado Livre: diagnóstico da conta, estratégia de produtos, anúncios, preço e Mercado Ads para vender mais. Presencial em São Paulo e online para todo o Brasil."
+  schema={schema}
+  breadcrumbs={[{ name: 'Consultoria Mercado Livre', path: '/consultoria-mercado-livre' }]}
+>
+  <PageHero
+    eyebrow="Consultoria Mercado Livre"
+    title="Descubra o que está travando suas vendas e como destravar."
+    lead="Consultoria para Mercado Livre com diagnóstico completo, plano de ação claro e acompanhamento próximo. Para quem está começando, quem quer crescer e marcas que querem escalar."
+    whatsappMessage="Olá! Quero saber mais sobre a consultoria para Mercado Livre."
+    ctaLabel="Quero minha consultoria"
+    bullets={['Presencial em SP ou online', 'Plano sob medida', 'Conversa sem compromisso']}
+  />
+
+  <FeatureList
+    eyebrow="O que analisamos"
+    title="Tudo que influencia suas vendas."
+    lead="Olhamos a operação inteira, do anúncio à entrega, porque vender mais depende das duas pontas."
+    items={[
+      { icon: 'search', title: 'O que vender', text: 'Análise de produtos, demanda, concorrência e margem para escolher com segurança.' },
+      { icon: 'tag', title: 'Anúncios', text: 'Títulos, ficha técnica, fotos e descrição para ganhar posição na busca.' },
+      { icon: 'chart', title: 'Preço e margem', text: 'Precificação considerando tarifas, frete e custos para vender com lucro.' },
+      { icon: 'megaphone', title: 'Mercado Ads', text: 'Estrutura de campanhas e leitura de ACOS para investir com retorno.' },
+      { icon: 'shield', title: 'Reputação', text: 'Plano para recuperar ou proteger sua reputação e os benefícios da conta.' },
+      { icon: 'truck', title: 'Logística', text: 'Prazos, modalidades de envio e processos para acabar com atrasos.' },
+    ]}
+  />
+
+  <CtaBand
+    title="Quer saber o que está travando a sua conta?"
+    text="Conte seu cenário e um especialista mostra por onde começar."
+    whatsappMessage="Olá! Quero entender o que está travando minha conta no Mercado Livre."
+    secondary={{ label: 'Solicitar proposta', href: '#contato' }}
+  />
+
+  <FeatureList
+    muted
+    eyebrow="Formatos"
+    title="Do jeito que a sua operação precisa."
+    items={[
+      { icon: 'compass', title: 'Consultoria', text: 'Diagnóstico e plano de ação, com acompanhamento para você executar.' },
+      { icon: 'store', title: 'Gestão de conta', text: 'A Northpoint opera sua loja no dia a dia: anúncios, Ads, perguntas e indicadores.' },
+      { icon: 'users', title: 'Presencial em SP', text: 'Encontros na sua operação ou no nosso espaço, em São Paulo.' },
+      { icon: 'rocket', title: 'Online para o Brasil', text: 'Reuniões e acompanhamento remoto para sellers de qualquer estado.' },
+    ]}
+  />
+
+  <Faq items={faq} title="Dúvidas sobre a consultoria" muted={false} />
+  <ContactSection defaultInterest="Consultoria" />
+</BaseLayout>

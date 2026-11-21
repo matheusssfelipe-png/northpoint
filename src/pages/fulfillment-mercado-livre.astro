@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import FeatureList from '../components/FeatureList.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import ContactSection from '../components/ContactSection.astro';
+import type { FaqItem } from '../data/faq';
+
+// TODO: validar com o cliente o escopo exato (modalidades atendidas, coleta, preparação para o Full etc.)
+const faq: FaqItem[] = [
+  { q: 'O que é fulfillment?', a: 'É a terceirização da logística do e-commerce: recebimento do estoque, armazenagem, separação, embalagem e envio dos pedidos. Você foca em vender e a operação fica com especialistas.' },
+  { q: 'Onde fica o estoque?', a: 'Em São Paulo, o maior polo logístico do Mercado Livre no país, o que favorece prazos de entrega mais curtos.' },
+  { q: 'Por que terceirizar ajuda minha reputação?', a: 'Com processos padronizados e prazos controlados, os pedidos saem no tempo certo. Menos atrasos significa reputação melhor e mais visibilidade para seus anúncios.' },
+  { q: 'Posso contratar o fulfillment junto com a consultoria?', a: 'Sim. Unir estratégia e logística é o diferencial da Northpoint: o que planejamos na consultoria é executado na operação.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Fulfillment para sellers do Mercado Livre',
+    serviceType: 'Fulfillment e logística para e-commerce',
+    provider: { '@id': new URL('/#organizacao', Astro.site).href },
+    areaServed: ['São Paulo', 'Brasil'],
+    description: 'Armazenagem, separação, embalagem e envio de pedidos do Mercado Livre em São Paulo, com foco em prazo e reputação.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+
+<BaseLayout
+  title="Fulfillment para Mercado Livre em São Paulo | Northpoint"
+  description="Fulfillment para sellers do Mercado Livre em São Paulo: armazenagem, separação, embalagem e envios no prazo para proteger sua reputação e vender mais."
+  schema={schema}
+  breadcrumbs={[{ name: 'Fulfillment Mercado Livre', path: '/fulfillment-mercado-livre' }]}
+>
+  <PageHero
+    eyebrow="Fulfillment · São Paulo"
+    title="Pedidos no prazo, reputação no verde e você livre para vender."
+    lead="Fulfillment para Mercado Livre em São Paulo: cuidamos do estoque ao envio, com a experiência de quem trabalha com logística de marketplace há mais de 5 anos."
+    whatsappMessage="Olá! Quero saber mais sobre o fulfillment para Mercado Livre."
+    ctaLabel="Quero terceirizar meus envios"
+    bullets={['Estoque em São Paulo', 'Envios no prazo', 'Integrado à consultoria']}
+  />
+  <!-- TODO: confirmar com o cliente o escopo exato (Flex, coleta, preparação para o Full) -->
+
+  <FeatureList
+    eyebrow="Como operamos"
+    title="Do recebimento à expedição."
+    lead="Um fluxo simples e controlado, para que cada pedido saia certo e no prazo."
+    items={[
+      { icon: 'package', title: 'Recebimento', text: 'Conferência e entrada do seu estoque com controle de quantidades.' },
+      { icon: 'warehouse', title: 'Armazenagem', text: 'Produtos organizados e rastreáveis, prontos para a separação.' },
+      { icon: 'check', title: 'Separação e embalagem', text: 'Pedido certo, embalado com cuidado e etiquetado corretamente.' },
+      { icon: 'truck', title: 'Envio no prazo', text: 'Expedição dentro do prazo para manter a reputação da sua conta.' },
+    ]}
+  />
+
+  <CtaBand
+    title="Seus envios estão atrasando?"
+    text="Fale com a gente e veja como o fulfillment da Northpoint protege sua reputação."
+    whatsappMessage="Olá! Meus envios estão atrasando e quero conhecer o fulfillment da Northpoint."
+    secondary={{ label: 'Solicitar proposta', href: '#contato' }}
+  />
+
+  <FeatureList
+    muted
+    eyebrow="Benefícios"
+    title="Por que terceirizar a logística."
+    items={[
+      { icon: 'clock', title: 'Fim dos atrasos', text: 'Processo padronizado que reduz atrasos, cancelamentos e reclamações.' },
+      { icon: 'shield', title: 'Reputação protegida', text: 'Envios no prazo sustentam sua reputação e os benefícios da conta.' },
+      { icon: 'chart', title: 'Escala sem dor de cabeça', text: 'Cresça sem precisar montar estrutura, equipe e espaço próprios.' },
+      { icon: 'compass', title: 'Estratégia integrada', text: 'Logística alinhada à consultoria para decisões melhores de estoque.' },
+    ]}
+  />
+
+  <Faq items={faq} title="Dúvidas sobre o fulfillment" muted={false} />
+  <ContactSection defaultInterest="Fulfillment" />
+</BaseLayout>

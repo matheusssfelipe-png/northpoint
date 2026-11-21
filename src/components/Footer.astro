@@ -1,0 +1,39 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import WaIcon from './WaIcon.astro';
+import { site, nav, navHref, waLink } from '../data/site';
+const year = new Date().getFullYear();
+const path = Astro.url.pathname;
+---
+
+<footer class="on-dark relative overflow-hidden bg-navy-950 pb-24 text-steel-200 lg:pb-0">
+  <div class="container-np grid gap-12 py-16 md:grid-cols-12">
+    <div class="md:col-span-5">
+      <Logo tone="light" />
+      <p class="mt-6 max-w-sm text-sm leading-relaxed text-steel-200/70">
+        Consultoria e fulfillment para quem vende no Mercado Livre. Atendimento presencial em São Paulo e online para todo o Brasil.
+      </p>
+    </div>
+    <nav aria-label="Rodapé" class="md:col-span-3">
+      <p class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-white">Navegação</p>
+      <ul class="mt-5 space-y-3 text-sm">
+        {nav.map((i) => <li><a class="transition-colors hover:text-white" href={navHref(i, path)}>{i.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="md:col-span-4">
+      <p class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-white">Contato</p>
+      <ul class="mt-5 space-y-3 text-sm">
+        <li><a class="inline-flex items-center gap-3 hover:text-white" href={waLink()} target="_blank" rel="noopener"><WaIcon class="size-4" />WhatsApp {site.contact.whatsappLabel}</a></li>
+        <li><a class="inline-flex items-center gap-3 hover:text-white" href={`mailto:${site.contact.email}`}><Icon name="mail" class="size-4" />{site.contact.email}</a></li>
+        <li><a class="inline-flex items-center gap-3 hover:text-white" href={site.contact.instagram} target="_blank" rel="noopener"><Icon name="instagram" class="size-4" />Instagram</a></li>
+        <li class="inline-flex items-center gap-3"><Icon name="pin" class="size-4" />São Paulo - SP</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rule opacity-30"></div>
+  <div class="container-np flex flex-col gap-2 py-6 text-xs text-steel-200/50 sm:flex-row sm:justify-between">
+    <p>© {year} {site.name}. Todos os direitos reservados.</p>
+    <p>Mercado Livre é marca registrada de seus respectivos titulares. A Northpoint não possui vínculo oficial com a plataforma.</p>
+  </div>
+</footer>

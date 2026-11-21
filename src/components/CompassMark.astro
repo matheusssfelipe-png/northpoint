@@ -1,0 +1,50 @@
+---
+// Símbolo provisório (rosa dos ventos) redesenhado em SVG a partir das referências.
+// TODO: substituir pelo vetor original quando o cliente enviar o arquivo.
+interface Props {
+  class?: string;
+  tone?: 'brand' | 'light';
+  animated?: boolean;
+}
+const { class: className = 'size-10', tone = 'brand', animated = false } = Astro.props;
+const c =
+  tone === 'light'
+    ? { a: '#ffffff', b: '#c7d8ee', d: '#6f9bd1', ring: 'rgba(255,255,255,.45)', dot: '#c7d8ee' }
+    : { a: '#4a78b0', b: '#0f2341', d: '#18345c', ring: '#a9b0ba', dot: '#18345c' };
+const main = [0, 90, 180, 270];
+const diag = [45, 135, 225, 315];
+---
+
+<svg
+  class={className}
+  viewBox="0 0 100 100"
+  role="img"
+  aria-label="Rosa dos ventos Northpoint"
+  data-compass={animated ? '' : undefined}
+>
+  <g class="np-ring" fill="none" stroke={c.ring}>
+    <circle cx="50" cy="50" r="33" stroke-width="3.2" />
+    <ellipse cx="50" cy="50" rx="33" ry="13" stroke-width=".8" opacity=".7" />
+    <ellipse cx="50" cy="50" rx="13" ry="33" stroke-width=".8" opacity=".7" />
+    <ellipse cx="50" cy="50" rx="33" ry="13" stroke-width=".6" opacity=".5" transform="rotate(45 50 50)" />
+    <ellipse cx="50" cy="50" rx="33" ry="13" stroke-width=".6" opacity=".5" transform="rotate(-45 50 50)" />
+  </g>
+  <g class="np-dots" fill={c.dot}>
+    {diag.map((deg) => <circle cx="50" cy="7" r="2.6" transform={`rotate(${deg} 50 50)`} />)}
+  </g>
+  <g class="np-star">
+    {diag.map((deg) => (
+      <g transform={`rotate(${deg} 50 50)`}>
+        <path d="M50 18 L50 50 L45.5 45.5Z" fill={c.d} />
+        <path d="M50 18 L50 50 L54.5 45.5Z" fill={c.b} />
+      </g>
+    ))}
+    {main.map((deg) => (
+      <g transform={`rotate(${deg} 50 50)`}>
+        <path d="M50 2 L50 50 L43 43Z" fill={c.a} />
+        <path d="M50 2 L50 50 L57 43Z" fill={c.b} />
+      </g>
+    ))}
+    <circle cx="50" cy="50" r="2.2" fill={tone === 'light' ? '#0f2341' : '#ffffff'} />
+  </g>
+</svg>

@@ -1,0 +1,37 @@
+---
+import HeroBackdrop from './HeroBackdrop.astro';
+import CompassMark from './CompassMark.astro';
+import Icon from './Icon.astro';
+import WaIcon from './WaIcon.astro';
+import { waLink } from '../data/site';
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead: string;
+  whatsappMessage?: string;
+  ctaLabel?: string;
+  bullets?: string[];
+}
+const { eyebrow, title, lead, whatsappMessage, ctaLabel = 'Falar com especialista', bullets } = Astro.props;
+---
+
+<section class="on-dark relative isolate overflow-hidden pb-20 pt-32 text-white md:pb-32 md:pt-48">
+  <HeroBackdrop />
+  <CompassMark tone="light" animated class="absolute -right-28 top-20 size-80 opacity-[0.08] lg:-right-24 lg:top-24 lg:size-[30rem]" />
+  <div class="container-np relative">
+    <p class="eyebrow" data-reveal>{eyebrow}</p>
+    <h1 class="mt-6 max-w-4xl text-[2.35rem] font-bold leading-[1.08] sm:text-5xl lg:text-6xl" data-split>{title}</h1>
+    <p class="mt-6 max-w-2xl text-lg leading-relaxed text-steel-200/85" data-reveal>{lead}</p>
+    <div class="mt-9 flex flex-col gap-3 sm:flex-row" data-reveal>
+      <a href={waLink(whatsappMessage)} target="_blank" rel="noopener" class="btn bg-[#25D366] py-4 text-base text-white shadow-lg shadow-black/20 hover:-translate-y-0.5">
+        <WaIcon class="size-5" /> {ctaLabel}
+      </a>
+      <a href="#contato" class="btn btn-ghost py-4 text-base">Solicitar proposta <Icon name="arrow" class="size-4" /></a>
+    </div>
+    {bullets && (
+      <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-steel-200/75" data-reveal>
+        {bullets.map((b) => <li class="flex items-center gap-2"><Icon name="check" class="size-4 text-steel-400" />{b}</li>)}
+      </ul>
+    )}
+  </div>
+</section>

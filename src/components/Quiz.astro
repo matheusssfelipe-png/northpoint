@@ -1,0 +1,183 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+import WaIcon from './WaIcon.astro';
+import CompassMark from './CompassMark.astro';
+import { site } from '../data/site';
+
+const steps: { key: string; q: string; options: { value: string; label: string; icon?: IconName }[] }[] = [
+  {
+    key: 'momento',
+    q: 'Em que momento está sua operação?',
+    options: [
+      { value: 'Ainda não vendo', label: 'Ainda não vendo', icon: 'sprout' },
+      { value: 'Até R$ 5 mil/mês', label: 'Até R$ 5 mil/mês', icon: 'chart' },
+      { value: 'R$ 5 mil a R$ 30 mil/mês', label: 'R$ 5 mil a 30 mil/mês', icon: 'chart' },
+      { value: 'Acima de R$ 30 mil/mês', label: 'Acima de R$ 30 mil/mês', icon: 'rocket' },
+    ],
+  },
+  {
+    key: 'desafio',
+    q: 'O que mais trava suas vendas hoje?',
+    options: [
+      { value: 'atraso', label: 'Atrasos no envio', icon: 'clock' },
+      { value: 'produto', label: 'Não sei o que vender', icon: 'search' },
+      { value: 'vendas', label: 'Vendas paradas', icon: 'chart' },
+      { value: 'ads', label: 'Ads sem retorno', icon: 'megaphone' },
+      { value: 'tempo', label: 'Sem tempo para operar a conta', icon: 'store' },
+      { value: 'comecar', label: 'Não sei por onde começar', icon: 'compass' },
+    ],
+  },
+  {
+    key: 'atendimento',
+    q: 'Como prefere ser atendido?',
+    options: [
+      { value: 'Presencial em São Paulo', label: 'Presencial em São Paulo', icon: 'pin' },
+      { value: 'Online', label: 'Online, de onde eu estiver', icon: 'users' },
+    ],
+  },
+];
+---
+
+<section id="diagnostico" class="relative overflow-hidden bg-ice py-24 md:py-32">
+  <CompassMark class="pointer-events-none absolute -left-32 top-10 size-[28rem] opacity-[0.04]" />
+  <div class="container-np relative grid items-start gap-12 lg:grid-cols-12">
+    <div class="lg:col-span-5 lg:sticky lg:top-32">
+      <p class="eyebrow" data-reveal>Diagnóstico em 30s</p>
+      <h2 class="mt-5 text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl" data-reveal>Descubra o que está travando suas vendas.</h2>
+      <p class="mt-5 text-lg leading-relaxed text-navy-700/80" data-reveal>
+        Responda 3 perguntas rápidas e receba a recomendação ideal para o seu momento. Depois, é só continuar a conversa com um especialista no WhatsApp.
+      </p>
+      <ul class="mt-8 hidden space-y-3 text-navy-700 lg:block" data-reveal>
+        <li class="flex items-center gap-3"><Icon name="check" class="size-5 text-steel-600" />Sem cadastro e sem compromisso</li>
+        <li class="flex items-center gap-3"><Icon name="check" class="size-5 text-steel-600" />Recomendação na hora</li>
+        <li class="flex items-center gap-3"><Icon name="check" class="size-5 text-steel-600" />Atendimento com quem entende de operação</li>
+      </ul>
+    </div>
+
+    <div
+      data-quiz
+      data-whatsapp={site.contact.whatsapp}
+      class="relative rounded-3xl border border-silver-200 bg-white p-5 shadow-[0_30px_80px_-30px_rgba(15,35,65,0.3)] sm:p-10 lg:col-span-7"
+      data-reveal
+    >
+      <div class="flex items-center justify-between gap-4 text-xs font-semibold uppercase tracking-[0.15em] text-silver-500">
+        <span data-quiz-label>Pergunta 1 de 3</span>
+        <button type="button" data-quiz-back class="invisible rounded-full px-3 py-1 text-steel-600 hover:bg-ice">← Voltar</button>
+      </div>
+      <div class="mt-3 h-1 overflow-hidden rounded-full bg-ice">
+        <div data-quiz-bar class="h-full w-1/3 rounded-full bg-gradient-to-r from-steel-600 to-steel-400 transition-[width] duration-700 ease-out-soft"></div>
+      </div>
+
+      {steps.map((s, i) => (
+        <fieldset data-quiz-step={i} data-key={s.key} hidden={i !== 0} class="np-step mt-8">
+          <legend class="font-display text-xl font-bold sm:text-2xl">{s.q}</legend>
+          <div class:list={['mt-6 grid gap-3', s.options.length > 2 && 'sm:grid-cols-2']}>
+            {s.options.map((o) => (
+              <button
+                type="button"
+                data-value={o.value}
+                data-text={o.label}
+                class="group flex min-h-14 items-center gap-4 rounded-2xl border border-silver-200 px-4 py-3.5 text-left font-medium transition-all duration-300 ease-out-soft hover:border-steel-400 hover:bg-ice active:scale-[0.98]"
+              >
+                {o.icon && (
+                  <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-ice text-steel-600 transition-colors group-hover:bg-steel-600 group-hover:text-white">
+                    <Icon name={o.icon} class="size-5" />
+                  </span>
+                )}
+                <span class="flex-1">{o.label}</span>
+                <Icon name="arrow" class="size-4 shrink-0 text-silver-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-steel-600" />
+              </button>
+            ))}
+          </div>
+        </fieldset>
+      ))}
+
+      <div data-quiz-result hidden class="np-step mt-8">
+        <p class="eyebrow">Nossa recomendação</p>
+        <h3 data-result-title class="mt-4 font-display text-2xl font-bold sm:text-3xl"></h3>
+        <p data-result-text class="mt-4 text-lg leading-relaxed text-navy-700/80"></p>
+        <div class="mt-6 rounded-2xl bg-ice p-5 text-sm text-navy-700">
+          <p class="font-semibold">Seu resumo</p>
+          <ul data-result-summary class="mt-2 space-y-1 text-navy-700/80"></ul>
+        </div>
+        <a data-result-cta href="#" target="_blank" rel="noopener" class="btn mt-8 w-full bg-[#25D366] py-4 text-base text-white hover:-translate-y-0.5 hover:shadow-lg sm:w-auto">
+          <WaIcon class="size-5" /> Receber meu plano no WhatsApp
+        </a>
+        <button type="button" data-quiz-restart class="mt-4 block text-sm font-medium text-steel-600 underline-offset-4 hover:underline">Refazer diagnóstico</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const recs: Record<string, { title: string; text: string }> = {
+    atraso: { title: 'Fulfillment Northpoint', text: 'Seu maior risco hoje é a reputação. Com armazenagem e envios no prazo, você protege a conta, recupera exposição e volta a crescer com tranquilidade.' },
+    produto: { title: 'Consultoria de produto e mercado', text: 'Vamos analisar demanda, concorrência e margem para você investir no que realmente vende, sem apostar no escuro.' },
+    vendas: { title: 'Consultoria + otimização de anúncios', text: 'Revisamos anúncios, preço e posicionamento para destravar o crescimento da sua conta.' },
+    ads: { title: 'Gestão de Mercado Ads', text: 'Reestruturamos suas campanhas para cada real investido voltar em vendas, e não só em cliques.' },
+    tempo: { title: 'Gestão de conta', text: 'A Northpoint opera sua loja no dia a dia: anúncios, Ads e indicadores. Você foca no negócio.' },
+    comecar: { title: 'Consultoria para começar certo', text: 'Montamos com você o caminho completo: o que vender, como precificar, como anunciar e como entregar.' },
+  };
+
+  function initQuiz() {
+    const root = document.querySelector<HTMLElement>('[data-quiz]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+
+    const steps = [...root.querySelectorAll<HTMLFieldSetElement>('[data-quiz-step]')];
+    const result = root.querySelector<HTMLElement>('[data-quiz-result]')!;
+    const bar = root.querySelector<HTMLElement>('[data-quiz-bar]')!;
+    const label = root.querySelector<HTMLElement>('[data-quiz-label]')!;
+    const back = root.querySelector<HTMLButtonElement>('[data-quiz-back]')!;
+    const answers: Record<string, { value: string; text: string }> = {};
+    let current = 0;
+
+    const show = (i: number) => {
+      current = i;
+      steps.forEach((s, j) => (s.hidden = j !== i));
+      result.hidden = i < steps.length;
+      bar.style.width = `${Math.min(((i + 1) / steps.length) * 100, 100)}%`;
+      label.textContent = i < steps.length ? `Pergunta ${i + 1} de ${steps.length}` : 'Pronto!';
+      back.classList.toggle('invisible', i === 0 || i >= steps.length);
+      if (i >= steps.length) renderResult();
+      // No celular a pessoa toca nas opções de baixo: traz o topo do card de volta para a tela
+      const top = root.getBoundingClientRect().top;
+      if (top < 0) window.scrollTo({ top: window.scrollY + top - 90, behavior: 'smooth' });
+    };
+
+    const renderResult = () => {
+      const rec = recs[answers.desafio?.value] ?? recs.comecar;
+      root.querySelector('[data-result-title]')!.textContent = rec.title;
+      root.querySelector('[data-result-text]')!.textContent = rec.text;
+      const lines = [
+        ['Momento', answers.momento?.text],
+        ['Maior desafio', answers.desafio?.text],
+        ['Atendimento', answers.atendimento?.text],
+      ];
+      root.querySelector('[data-result-summary]')!.innerHTML = lines
+        .map(([k, v]) => `<li><strong class="font-medium text-navy-800">${k}:</strong> ${v}</li>`)
+        .join('');
+      const msg = [
+        'Olá! Fiz o diagnóstico rápido no site da Northpoint.',
+        ...lines.map(([k, v]) => `${k}: ${v}`),
+        `Recomendação: ${rec.title}`,
+        'Quero receber meu plano!',
+      ].join('\n');
+      root.querySelector<HTMLAnchorElement>('[data-result-cta]')!.href =
+        `https://wa.me/${root.dataset.whatsapp}?text=${encodeURIComponent(msg)}`;
+    };
+
+    steps.forEach((step, i) => {
+      step.querySelectorAll<HTMLButtonElement>('button[data-value]').forEach((btn) =>
+        btn.addEventListener('click', () => {
+          answers[step.dataset.key!] = { value: btn.dataset.value!, text: btn.dataset.text! };
+          show(i + 1);
+        }),
+      );
+    });
+    back.addEventListener('click', () => show(Math.max(0, current - 1)));
+    root.querySelector('[data-quiz-restart]')!.addEventListener('click', () => show(0));
+  }
+
+  document.addEventListener('astro:page-load', initQuiz);
+</script>

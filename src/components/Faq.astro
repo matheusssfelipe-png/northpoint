@@ -1,0 +1,34 @@
+---
+import Icon from './Icon.astro';
+import WaIcon from './WaIcon.astro';
+import { waLink } from '../data/site';
+import type { FaqItem } from '../data/faq';
+interface Props { items: FaqItem[]; title?: string; muted?: boolean }
+const { items, title = 'Perguntas frequentes', muted = true } = Astro.props;
+---
+
+<section id="duvidas" class:list={['py-24 md:py-32', muted && 'bg-ice']}>
+  <div class="container-np grid gap-12 lg:grid-cols-12">
+    <div class="lg:col-span-4">
+      <p class="eyebrow" data-reveal>Dúvidas</p>
+      <h2 class="mt-5 text-3xl font-bold sm:text-4xl" data-reveal>{title}</h2>
+      <p class="mt-5 text-navy-700/75" data-reveal>Não encontrou o que procurava? Pergunte direto para um especialista.</p>
+      <a href={waLink('Olá! Tenho uma dúvida sobre os serviços da Northpoint.')} target="_blank" rel="noopener" class="btn btn-primary mt-7" data-reveal>
+        <WaIcon class="size-5" /> Tirar minha dúvida
+      </a>
+    </div>
+    <div data-faq class="divide-y divide-silver-200 border-y border-silver-200 lg:col-span-8">
+      {items.map((item) => (
+        <details class="group" data-reveal>
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 font-display text-lg font-semibold [&::-webkit-details-marker]:hidden">
+            {item.q}
+            <span class="grid size-9 shrink-0 place-items-center rounded-full border border-silver-200 text-steel-600 transition-transform duration-500 ease-out-soft group-open:rotate-45">
+              <Icon name="plus" class="size-4" />
+            </span>
+          </summary>
+          <p class="max-w-2xl pb-6 leading-relaxed text-navy-700/80">{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

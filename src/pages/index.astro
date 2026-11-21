@@ -1,0 +1,310 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroBackdrop from '../components/HeroBackdrop.astro';
+import CompassMark from '../components/CompassMark.astro';
+import Icon, { type IconName } from '../components/Icon.astro';
+import WaIcon from '../components/WaIcon.astro';
+import Marquee from '../components/Marquee.astro';
+import Quiz from '../components/Quiz.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Faq from '../components/Faq.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { waLink } from '../data/site';
+import { faqHome } from '../data/faq';
+
+const pains: { icon: IconName; title: string; text: string; cta: string; msg: string }[] = [
+  { icon: 'clock', title: 'Pedidos atrasando', text: 'Atraso derruba a reputação, tira seu anúncio do topo e afasta o comprador.', cta: 'Quero envios no prazo', msg: 'Olá! Meus envios estão atrasando e quero resolver isso.' },
+  { icon: 'search', title: 'Não sabe o que vender', text: 'Escolher produto no achismo prende dinheiro em estoque parado e margem baixa.', cta: 'Quero saber o que vender', msg: 'Olá! Quero ajuda para saber o que vender no Mercado Livre.' },
+  { icon: 'chart', title: 'Vendas paradas', text: 'Anúncio no ar não é anúncio que vende. Sem estratégia, a concorrência leva o cliente.', cta: 'Quero destravar as vendas', msg: 'Olá! Minhas vendas no Mercado Livre estão paradas. Pode me ajudar?' },
+  { icon: 'megaphone', title: 'Ads que não se paga', text: 'Investir em Mercado Ads sem método é pagar por clique que não vira venda.', cta: 'Quero Ads com retorno', msg: 'Olá! Invisto em Mercado Ads mas não vejo retorno. Pode me ajudar?' },
+];
+
+const without = [
+  'Escolher produto no achismo',
+  'Anúncios perdendo posição na busca',
+  'Mercado Ads consumindo verba sem retorno',
+  'Envios atrasando e reputação caindo',
+  'Você apagando incêndio em vez de crescer',
+];
+const withNp = [
+  'Produtos escolhidos com análise de demanda e margem',
+  'Anúncios otimizados para a busca do Mercado Livre',
+  'Campanhas com foco em retorno sobre o investimento',
+  'Pedidos saindo no prazo com fulfillment em São Paulo',
+  'Você focado em crescer, com um plano claro',
+];
+
+const services: { icon: IconName; title: string; text: string }[] = [
+  { icon: 'compass', title: 'Consultoria', text: 'Diagnóstico da conta e plano de ação para vender mais.' },
+  { icon: 'store', title: 'Gestão de conta', text: 'A operação do dia a dia da sua loja, feita por especialistas.' },
+  { icon: 'tag', title: 'Criação de anúncios', text: 'Títulos, fichas técnicas e fotos que posicionam e convertem.' },
+  { icon: 'megaphone', title: 'Mercado Ads', text: 'Campanhas com foco em retorno, não só em cliques.' },
+  { icon: 'warehouse', title: 'Armazenagem', text: 'Seu estoque guardado e controlado em São Paulo.' },
+  { icon: 'truck', title: 'Envios', text: 'Separação, embalagem e expedição dentro do prazo.' },
+];
+
+const steps = [
+  { n: '01', title: 'Conversa inicial', text: 'Entendemos seu momento, seus números e seus objetivos.' },
+  { n: '02', title: 'Diagnóstico', text: 'Analisamos conta, anúncios, reputação, Ads e logística.' },
+  { n: '03', title: 'Plano e execução', text: 'Prioridades claras. Você executa com nosso apoio ou nós operamos por você.' },
+  { n: '04', title: 'Crescimento', text: 'Acompanhamento de indicadores e ajustes contínuos.' },
+];
+
+const audiences: { icon: IconName; title: string; text: string; msg: string }[] = [
+  { icon: 'sprout', title: 'Quero começar a vender', text: 'Direção sobre o que vender, como precificar e como montar a operação certa desde o primeiro anúncio.', msg: 'Olá! Quero começar a vender no Mercado Livre do jeito certo.' },
+  { icon: 'rocket', title: 'Já vendo e quero crescer', text: 'Para sellers que precisam destravar escala, margem e reputação sem perder o controle.', msg: 'Olá! Já vendo no Mercado Livre e quero crescer.' },
+  { icon: 'factory', title: 'Sou loja ou indústria', text: 'Estrutura e estratégia para marcas que querem entrar ou expandir no Mercado Livre.', msg: 'Olá! Represento uma loja/indústria e quero expandir no Mercado Livre.' },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqHome.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<BaseLayout
+  title="Consultoria e Fulfillment para Mercado Livre em São Paulo | Northpoint"
+  description="Pare de perder vendas no Mercado Livre. Consultoria, gestão de conta, anúncios, Mercado Ads e fulfillment com envios no prazo em São Paulo. Atendimento presencial em SP e online."
+  schema={[faqSchema]}
+>
+  <!-- HERO -->
+  <section class="on-dark relative isolate flex min-h-[100svh] items-center overflow-hidden pb-16 pt-28 text-white lg:pb-20 lg:pt-32">
+    <HeroBackdrop />
+    <CompassMark tone="light" animated class="absolute -right-28 top-20 size-80 opacity-[0.09] lg:hidden" />
+    <div class="container-np relative grid items-center gap-16 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="eyebrow" data-reveal>Consultoria + Fulfillment</p>
+        <h1 class="mt-6 text-[2.75rem] font-bold leading-[1.04] sm:text-6xl lg:text-7xl" data-split>
+          Pare de perder vendas no <span class="bg-gradient-to-r from-steel-400 to-steel-200 bg-clip-text pb-1 text-transparent">Mercado Livre</span>.
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-steel-200/85" data-reveal>
+          Estratégia para vender mais e logística para entregar no prazo, com quem vive a operação de marketplace há mais de 5 anos.
+        </p>
+        <div class="mt-9 flex flex-col gap-3 sm:flex-row" data-reveal>
+          <a href={waLink()} target="_blank" rel="noopener" class="btn bg-[#25D366] py-4 text-base text-white shadow-lg shadow-black/20 hover:-translate-y-0.5">
+            <WaIcon class="size-5" /> Quero vender mais
+          </a>
+          <a href="#diagnostico" class="btn btn-ghost py-4 text-base">Diagnóstico em 30 segundos <Icon name="arrow" class="size-4" /></a>
+        </div>
+        <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-steel-200/75" data-reveal>
+          <li class="flex items-center gap-2"><Icon name="check" class="size-4 text-steel-400" />Conversa sem compromisso</li>
+          <li class="flex items-center gap-2"><Icon name="check" class="size-4 text-steel-400" />Presencial em SP ou online</li>
+        </ul>
+        <dl class="mt-12 grid max-w-xl grid-cols-3 gap-4 border-t border-white/10 pt-7 sm:gap-6" data-reveal>
+          <div><dt class="text-xs text-steel-200/60">Experiência</dt><dd class="mt-1 whitespace-nowrap font-display text-xl font-bold sm:text-3xl"><span data-count="5" data-suffix="+">5+</span> anos</dd><dd class="text-xs text-steel-200/60">em logística de marketplace</dd></div>
+          <div><dt class="text-xs text-steel-200/60">Atendimento</dt><dd class="mt-1 whitespace-nowrap font-display text-xl font-bold sm:text-3xl">SP + Brasil</dd><dd class="text-xs text-steel-200/60">presencial e online</dd></div>
+          <div><dt class="text-xs text-steel-200/60">Cobertura</dt><dd class="mt-1 whitespace-nowrap font-display text-xl font-bold sm:text-3xl"><span data-count="360" data-suffix="°">360°</span></dd><dd class="text-xs text-steel-200/60">do anúncio à entrega</dd></div>
+        </dl>
+      </div>
+      <div class="relative hidden lg:col-span-5 lg:block">
+        <div class="absolute inset-0 m-auto size-[26rem] rounded-full bg-steel-600/20 blur-3xl"></div>
+        <CompassMark tone="light" animated class="relative mx-auto size-[26rem] drop-shadow-[0_30px_60px_rgba(0,0,0,.35)]" />
+      </div>
+    </div>
+  </section>
+
+  <Marquee />
+
+  <!-- DORES -->
+  <section class="py-20 md:py-32">
+    <div class="container-np">
+      <div class="max-w-3xl">
+        <p class="eyebrow" data-reveal>Você se identifica?</p>
+        <h2 class="mt-5 text-3xl font-bold sm:text-4xl lg:text-5xl" data-reveal>Cada um desses problemas está custando vendas agora.</h2>
+        <p class="mt-5 text-lg text-navy-700/75" data-reveal>A boa notícia: todos têm solução. Toque no seu e fale direto com um especialista.</p>
+      </div>
+      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {pains.map((p) => (
+          <a href={waLink(p.msg)} target="_blank" rel="noopener" class="card group flex flex-col" data-reveal>
+            <span class="grid size-12 place-items-center rounded-xl bg-ice text-steel-600 transition-colors duration-500 group-hover:bg-steel-600 group-hover:text-white"><Icon name={p.icon} /></span>
+            <h3 class="mt-6 text-xl font-semibold">{p.title}</h3>
+            <p class="mt-3 flex-1 leading-relaxed text-navy-700/75">{p.text}</p>
+            <span class="mt-6 inline-flex items-center gap-2 font-display text-sm font-semibold text-steel-600">
+              {p.cta} <Icon name="arrow" class="size-4 transition-transform duration-500 group-hover:translate-x-1" />
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARAÇÃO -->
+  <section class="bg-ice py-20 md:py-32">
+    <div class="container-np">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="eyebrow justify-center" data-reveal>A diferença</p>
+        <h2 class="mt-5 text-3xl font-bold sm:text-4xl lg:text-5xl" data-reveal>Operar no escuro ou ter um norte?</h2>
+      </div>
+      <div class="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-2">
+        <div class="rounded-3xl border border-silver-200 bg-white p-7 sm:p-9" data-reveal>
+          <p class="font-display text-sm font-semibold uppercase tracking-[0.15em] text-silver-500">Operando sozinho</p>
+          <ul class="mt-6 space-y-4">
+            {without.map((t) => (
+              <li class="flex gap-3 text-navy-700/70">
+                <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-silver-200/70 text-silver-500">
+                  <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18" /></svg>
+                </span>
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="on-dark relative overflow-hidden rounded-3xl bg-navy-800 p-7 text-white shadow-[0_30px_80px_-30px_rgba(15,35,65,0.6)] sm:p-9" data-reveal>
+          <CompassMark tone="light" class="absolute -bottom-16 -right-16 size-60 opacity-[0.08]" />
+          <p class="font-display text-sm font-semibold uppercase tracking-[0.15em] text-steel-400">Com a Northpoint</p>
+          <ul class="relative mt-6 space-y-4">
+            {withNp.map((t) => (
+              <li class="flex gap-3">
+                <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-steel-600 text-white"><Icon name="check" class="size-3.5" /></span>
+                {t}
+              </li>
+            ))}
+          </ul>
+          <a href={waLink('Olá! Quero ter a Northpoint cuidando da minha operação no Mercado Livre.')} target="_blank" rel="noopener" class="btn relative mt-8 w-full bg-[#25D366] text-white sm:w-auto">
+            <WaIcon class="size-5" /> Quero a Northpoint comigo
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUÇÕES -->
+  <section id="solucoes" class="py-20 md:py-32">
+    <div class="container-np">
+      <div class="max-w-2xl">
+        <p class="eyebrow" data-reveal>Soluções</p>
+        <h2 class="mt-5 text-3xl font-bold sm:text-4xl lg:text-5xl" data-reveal>Da estratégia à entrega, um só parceiro.</h2>
+      </div>
+
+      <div class="mt-12 grid gap-4 lg:grid-cols-2">
+        <a href="/consultoria-mercado-livre" data-spotlight class="group on-dark relative overflow-hidden rounded-3xl bg-navy-800 p-8 text-white transition-transform duration-700 ease-out-soft hover:-translate-y-1 sm:p-10" data-reveal>
+          <CompassMark tone="light" class="absolute -bottom-16 -right-16 size-64 opacity-10 transition-transform duration-1000 ease-out-soft group-hover:rotate-45" />
+          <p class="eyebrow">Estratégia</p>
+          <h3 class="mt-5 text-2xl font-bold sm:text-3xl">Consultoria Mercado Livre</h3>
+          <p class="mt-4 max-w-md leading-relaxed text-steel-200/80">Descubra o que vender, como anunciar e onde investir para crescer com margem.</p>
+          <span class="mt-8 inline-flex items-center gap-2 font-display text-sm font-semibold">Conhecer a consultoria <Icon name="arrow" class="size-4 transition-transform duration-500 group-hover:translate-x-1" /></span>
+        </a>
+        <a href="/fulfillment-mercado-livre" data-spotlight class="group relative overflow-hidden rounded-3xl border border-silver-200 bg-white p-8 transition-transform duration-700 ease-out-soft hover:-translate-y-1 sm:p-10" data-reveal>
+          <Icon name="package" class="absolute -bottom-10 -right-6 size-56 text-ice transition-transform duration-1000 ease-out-soft group-hover:-rotate-6" />
+          <p class="eyebrow">Logística</p>
+          <h3 class="relative mt-5 text-2xl font-bold sm:text-3xl">Fulfillment para sellers</h3>
+          <p class="relative mt-4 max-w-md leading-relaxed text-navy-700/75">Seu estoque em São Paulo e seus pedidos saindo no prazo. Reputação protegida, você livre para vender.</p>
+          <span class="relative mt-8 inline-flex items-center gap-2 font-display text-sm font-semibold text-steel-600">Conhecer o fulfillment <Icon name="arrow" class="size-4 transition-transform duration-500 group-hover:translate-x-1" /></span>
+        </a>
+      </div>
+
+      <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((s) => (
+          <a href={waLink(`Olá! Tenho interesse em ${s.title.toLowerCase()} para o Mercado Livre.`)} target="_blank" rel="noopener" class="card group flex items-start gap-5" data-reveal>
+            <span class="text-steel-600"><Icon name={s.icon} class="size-7" /></span>
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold">{s.title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-navy-700/70">{s.text}</p>
+              <span class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-steel-600 lg:opacity-0 lg:transition-opacity lg:duration-500 lg:group-hover:opacity-100">
+                Falar sobre isso <Icon name="arrow" class="size-3.5" />
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Quiz />
+
+  <!-- COMO FUNCIONA -->
+  <section id="como-funciona" class="py-20 md:py-32">
+    <div class="container-np">
+      <div class="max-w-2xl">
+        <p class="eyebrow" data-reveal>Como funciona</p>
+        <h2 class="mt-5 text-3xl font-bold sm:text-4xl lg:text-5xl" data-reveal>Simples para você. Completo na operação.</h2>
+      </div>
+      <div class="relative mt-14">
+        <div class="absolute left-0 right-0 top-6 hidden h-px bg-silver-200 lg:block">
+          <div data-progress class="h-full origin-left bg-gradient-to-r from-steel-600 to-steel-400"></div>
+        </div>
+        <div class="absolute bottom-6 left-6 top-6 w-px bg-silver-200 lg:hidden"></div>
+        <ol class="grid gap-10 lg:grid-cols-4">
+          {steps.map((s) => (
+            <li class="relative flex gap-5 lg:block" data-reveal>
+              <span class="relative grid size-12 shrink-0 place-items-center rounded-full border border-silver-200 bg-white font-display text-sm font-bold text-steel-600">{s.n}</span>
+              <div>
+                <h3 class="text-xl font-semibold lg:mt-6">{s.title}</h3>
+                <p class="mt-2 leading-relaxed text-navy-700/75">{s.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div class="mt-14 flex flex-col gap-3 sm:flex-row" data-reveal>
+        <a href={waLink('Olá! Quero começar com a conversa inicial.')} target="_blank" rel="noopener" class="btn btn-primary"><WaIcon class="size-5" /> Começar pelo passo 01</a>
+        <a href="#diagnostico" class="btn btn-ghost">Fazer o diagnóstico rápido</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre" class="on-dark relative overflow-hidden bg-navy-900 py-20 text-white md:py-32">
+    <div class="absolute inset-0 opacity-30 [background-image:radial-gradient(rgba(199,216,238,.3)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:linear-gradient(to_left,black,transparent_60%)]"></div>
+    <div class="container-np relative grid items-center gap-14 lg:grid-cols-2">
+      <div>
+        <p class="eyebrow" data-reveal>Sobre a Northpoint</p>
+        <h2 class="mt-5 text-3xl font-bold sm:text-4xl lg:text-5xl" data-reveal>Quem entende de operação, entende de venda.</h2>
+        <p class="mt-6 text-lg leading-relaxed text-steel-200/80" data-reveal>
+          A Northpoint nasceu de mais de 5 anos em operação logística na Amazon e da atuação direta no Mercado Livre. Conhecemos por dentro o que acontece no anúncio e o que acontece no estoque.
+        </p>
+        <p class="mt-4 text-lg leading-relaxed text-steel-200/80" data-reveal>
+          Por isso entregamos as duas pontas, com compromisso e responsabilidade em cada pedido.
+        </p>
+        <a href={waLink('Olá! Quero conhecer melhor a Northpoint.')} target="_blank" rel="noopener" class="btn btn-primary mt-9" data-reveal>
+          Falar com a Northpoint <Icon name="arrow" class="size-4" />
+        </a>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {[
+          { icon: 'shield', t: 'Profissionalismo', d: 'Processos claros, comunicação transparente e compromisso com prazos.' },
+          { icon: 'target', t: 'Eficiência', d: 'Foco no que gera resultado: vendas, margem e reputação.' },
+          { icon: 'warehouse', t: 'Visão de operação', d: 'Experiência real em logística de marketplace, não só teoria.' },
+          { icon: 'users', t: 'Proximidade', d: 'Atendimento presencial em São Paulo e online em todo o Brasil.' },
+        ].map((v) => (
+          <div data-spotlight class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors duration-500 hover:border-steel-400/40" data-reveal>
+            <Icon name={v.icon as IconName} class="size-6 text-steel-400" />
+            <h3 class="mt-4 text-lg font-semibold">{v.t}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-steel-200/70">{v.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PARA QUEM -->
+  <section class="pt-20 md:pt-32">
+    <div class="container-np">
+      <div class="max-w-2xl">
+        <p class="eyebrow" data-reveal>Para quem</p>
+        <h2 class="mt-5 text-3xl font-bold sm:text-4xl lg:text-5xl" data-reveal>Qual é o seu momento?</h2>
+      </div>
+      <div class="mt-12 grid gap-4 md:grid-cols-3">
+        {audiences.map((a) => (
+          <a href={waLink(a.msg)} target="_blank" rel="noopener" class="card group flex flex-col" data-reveal>
+            <Icon name={a.icon} class="size-8 text-steel-600" />
+            <h3 class="mt-6 text-xl font-semibold">{a.title}</h3>
+            <p class="mt-3 flex-1 leading-relaxed text-navy-700/75">{a.text}</p>
+            <span class="mt-6 inline-flex items-center gap-2 font-display text-sm font-semibold text-steel-600">
+              Esse é o meu caso <Icon name="arrow" class="size-4 transition-transform duration-500 group-hover:translate-x-1" />
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Cada dia sem estratégia é uma venda que fica com a concorrência."
+    text="Fale agora com um especialista e descubra o próximo passo da sua operação."
+  />
+
+  <Faq items={faqHome} />
+  <ContactSection />
+</BaseLayout>
